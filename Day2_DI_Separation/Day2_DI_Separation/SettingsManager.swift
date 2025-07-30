@@ -8,7 +8,7 @@
 import Foundation
 
 class SettingsManager {
-    private(set) var isDarkModeEnabled = false
+    private var isDarkModeEnabled = false
 
     func toggleDarkMode() {
         isDarkModeEnabled.toggle()
