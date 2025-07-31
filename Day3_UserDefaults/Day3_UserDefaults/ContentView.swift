@@ -53,7 +53,7 @@ struct ContentView: View {
                 Text("Login Status: \(isLoggedIn ? "ON" : "OFF")")
 
                 NavigationLink(destination: SettingsView()) {
-                    Text("Go to Settings")
+                    Text("Settings")
                         .padding()
                         .frame(maxWidth: .infinity)
                         .background(.green)
