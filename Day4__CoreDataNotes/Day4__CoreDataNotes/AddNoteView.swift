@@ -4,6 +4,7 @@
 //
 //  Created by cs_ios on 31/07/25.
 //
+// AddNoteView.swift
 import SwiftUI
 
 struct AddNoteView: View {
@@ -13,20 +14,29 @@ struct AddNoteView: View {
     @State private var title = ""
     @State private var noteBody = ""
 
+    var noteToEdit: NotesEntity?
+
     var body: some View {
         NavigationView {
             Form {
                 Section(header: Text("Title")) {
                     TextField("Enter title", text: $title)
                 }
+
                 Section(header: Text("Body")) {
                     TextEditor(text: $noteBody)
                         .frame(height: 150)
                 }
-                Button("Save Note") {
-                    let newNote = NotesEntity(context: viewContext)
-                    newNote.title = title
-                    newNote.body = noteBody
+
+                Button(noteToEdit == nil ? "Save Note" : "Update Note") {
+                    if let note = noteToEdit {
+                        note.title = title
+                        note.body = noteBody
+                    } else {
+                        let newNote = NotesEntity(context: viewContext)
+                        newNote.title = title
+                        newNote.body = noteBody
+                    }
 
                     do {
                         try viewContext.save()
@@ -37,10 +47,17 @@ struct AddNoteView: View {
                 }
                 .disabled(title.isEmpty || noteBody.isEmpty)
             }
-            .navigationTitle("New Note")
+            .navigationTitle(noteToEdit == nil ? "New Note" : "Edit Note")
             .navigationBarItems(trailing: Button("Cancel") {
                 dismiss()
             })
+            .onAppear {
+                if let note = noteToEdit {
+                    title = note.title ?? ""
+                    noteBody = note.body ?? ""
+                }
+            }
         }
     }
 }
+
